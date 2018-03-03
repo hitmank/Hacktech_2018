@@ -3,6 +3,7 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import Body, Media, Message, MessagingResponse
 import requests
+import route_parser
 #from twilio.twiml.messaging_response import MessagingResponse
 from twilio import twiml
 
@@ -23,12 +24,17 @@ def sms_ahoy_reply():
    # response.append(message)
     source_location = "Minneapolis"
     dest_location = "St. Paul"
-    r = requests.get("http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0="+from_text+"&wp.1="+dest_text+"&optmz=distance&routeAttributes=routePath&key=AmAugBLaNYZ5kK48nDsSyH2IkXZTMgLdevV0cwJkIohl5A4hitqxiCmKhDAAq7cr")
+    r = requests.get("http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0="+from_text+$
     data = r.json() 
-    message.body(str(r.status_code))   
+    #message.body(str(r.status_code))  
+    #print(str(data)) 
+    message.body(route_parser.extract_path((data))[:100])
     response.append(message)
-    print(str(data))
-    return str(response)
+    #print(str(data))
+    #print str(response)
+    res1 =  (str(response))
+    print res1
+    return res1
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
