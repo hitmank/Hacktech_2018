@@ -4,6 +4,7 @@ from flask import Flask, request
 from twilio.twiml.messaging_response import Body, Media, Message, MessagingResponse
 import requests
 import route_parser
+import parse_img
 from twilio.twiml.voice_response import VoiceResponse, Say
 #from twilio.twiml.messaging_response import MessagingResponse
 from twilio import twiml
@@ -23,11 +24,11 @@ def sms_ahoy_reply():
 
     if request.form['NumMedia'] != '0':
   image1 = request.form['MediaUrl0']        
-        the_url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/58efabf4-d519-417c-8f4f-5a4550cac311/url?iterationId=35d96f2d-3e3f-4178-9e97-8b2635207616"
+        the_url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/58efabf4-d519-417c-8f4f-5a4550cac311/url?iterationId=48733f93-c9da-4448-99b4-ba1e4d37f50d"
         res = requests.post(url = the_url,
                     data=json.dumps({"Url":image1}),
                     headers={'Content-Type': 'application/json',"Prediction-Key":"5dddbd7652e24ea99576c57ef9fb381a"})
-        print(res.json())    
+        print(parse_img.get_tag(res.json()))    
         return "dummy"
 
     else:
@@ -36,21 +37,22 @@ def sms_ahoy_reply():
       body = body.lower()
       #from_text = re.search(r'from(.*?)to', body).group(1)
       #dest_text =  body.split("to",1)[1]
-      grp = re.search(r'from(.*?)to(.*?)by(.*?)',body)
+  body1 = body.split("by",1)[0]
+      grp = re.search(r'from(.*?)to',body1)
       from_text = grp.group(1)
-      dest_text = grp.group(2)
-      if (grp.group(3)):  
+      dest_text = body1.split("to",1)[1]
+      if (re.search(r'by',body)): 
       mode = body.split("by",1)[1]
       else:
     mode = None
-      print from_text
-      print dest_text
-      print mode
+      #print from_text
+      #print dest_text
+      #print mode
       if(mode == "walk"):
     md = "Walking"
       else:
     md = "Driving"
-      print md
+      #print md
       response = MessagingResponse()
       message_directions = Message()
       message_mapImage = Message()
