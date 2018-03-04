@@ -24,7 +24,7 @@ def sms_ahoy_reply():
 
     if request.form['NumMedia'] != '0':
   image1 = request.form['MediaUrl0']        
-        the_url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/58efabf4-d519-417c-8f4f-5a4550cac311/url?iterationId=48733f93-c9da-4448-99b4-ba1e4d37f50d"
+        the_url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.1/Prediction/58efabf4-d519-417c-8f4f-5a4550cac311/url?iterationId=78a30fb3-ce3b-4858-afe6-be52a84ddcd1"
         res = requests.post(url = the_url,
                     data=json.dumps({"Url":image1}),
                     headers={'Content-Type': 'application/json',"Prediction-Key":"5dddbd7652e24ea99576c57ef9fb381a"})
@@ -44,7 +44,8 @@ def sms_ahoy_reply():
 
     else:
       # Start our response
-      body = request.values.get('Body', None) 
+      body = request.values.get('Body', None)
+  body = body.lower() 
       if "from" in body:
 
     body = body.lower()
